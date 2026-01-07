@@ -56,29 +56,26 @@ ENV TOKENIZERS_PARALLELISM=true
 ENV PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 # Create entrypoint script
-RUN cat > /workspace/entrypoint.sh << 'EOF'
-#!/bin/bash
-set -e
-
-echo "=================================================="
-echo "LTX-2 Training Container"
-echo "=================================================="
-echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader)"
-echo "CUDA Version: $(nvidia-smi --query-gpu=driver_version --format=csv,noheader)"
-echo "Python: $(python --version)"
-echo "Working Directory: $(pwd)"
-echo "=================================================="
-
-# If a command was provided, run it
-if [ $# -gt 0 ]; then
-    exec "$@"
-else
-    # Default: start bash
-    exec /bin/bash
-fi
-EOF
-
-RUN chmod +x /workspace/entrypoint.sh
+RUN echo '#!/bin/bash' > /workspace/entrypoint.sh && \
+    echo 'set -e' >> /workspace/entrypoint.sh && \
+    echo '' >> /workspace/entrypoint.sh && \
+    echo 'echo "=================================================="' >> /workspace/entrypoint.sh && \
+    echo 'echo "LTX-2 Training Container"' >> /workspace/entrypoint.sh && \
+    echo 'echo "=================================================="' >> /workspace/entrypoint.sh && \
+    echo 'echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader)"' >> /workspace/entrypoint.sh && \
+    echo 'echo "CUDA Version: $(nvidia-smi --query-gpu=driver_version --format=csv,noheader)"' >> /workspace/entrypoint.sh && \
+    echo 'echo "Python: $(python --version)"' >> /workspace/entrypoint.sh && \
+    echo 'echo "Working Directory: $(pwd)"' >> /workspace/entrypoint.sh && \
+    echo 'echo "=================================================="' >> /workspace/entrypoint.sh && \
+    echo '' >> /workspace/entrypoint.sh && \
+    echo '# If a command was provided, run it' >> /workspace/entrypoint.sh && \
+    echo 'if [ $# -gt 0 ]; then' >> /workspace/entrypoint.sh && \
+    echo '    exec "$@"' >> /workspace/entrypoint.sh && \
+    echo 'else' >> /workspace/entrypoint.sh && \
+    echo '    # Default: start bash' >> /workspace/entrypoint.sh && \
+    echo '    exec /bin/bash' >> /workspace/entrypoint.sh && \
+    echo 'fi' >> /workspace/entrypoint.sh && \
+    chmod +x /workspace/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/workspace/entrypoint.sh"]
