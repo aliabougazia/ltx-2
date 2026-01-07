@@ -1,0 +1,88 @@
+{
+  "tests": [
+    {
+      "name": "training_smoke_test",
+      "input": {
+        "task": "train",
+        "model_path": "/workspace/checkpoints/ltx-2-19b-dev.safetensors",
+        "text_encoder_path": "/workspace/checkpoints/gemma-3-12b-it-qat-q4_0-unquantized",
+        "preprocessed_data_root": "/workspace/datasets/test/.precomputed/",
+        "output_dir": "outputs/test-training",
+        "steps": 10,
+        "batch_size": 1,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 1e-4,
+        "lora_rank": 8,
+        "with_audio": false,
+        "quantization": "int8-quanto",
+        "validation_interval": null,
+        "checkpoint_interval": null
+      },
+      "timeout": 300000
+    },
+    {
+      "name": "training_with_audio",
+      "input": {
+        "task": "train",
+        "model_path": "/workspace/checkpoints/ltx-2-19b-dev.safetensors",
+        "text_encoder_path": "/workspace/checkpoints/gemma-3-12b-it-qat-q4_0-unquantized",
+        "preprocessed_data_root": "/workspace/datasets/test/.precomputed/",
+        "output_dir": "outputs/test-audio-training",
+        "steps": 10,
+        "batch_size": 1,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 1e-4,
+        "lora_rank": 8,
+        "with_audio": true,
+        "quantization": "int8-quanto",
+        "validation_interval": null,
+        "checkpoint_interval": null
+      },
+      "timeout": 300000
+    },
+    {
+      "name": "training_no_quantization",
+      "input": {
+        "task": "train",
+        "model_path": "/workspace/checkpoints/ltx-2-19b-dev.safetensors",
+        "text_encoder_path": "/workspace/checkpoints/gemma-3-12b-it-qat-q4_0-unquantized",
+        "preprocessed_data_root": "/workspace/datasets/test/.precomputed/",
+        "output_dir": "outputs/test-no-quant",
+        "steps": 5,
+        "batch_size": 1,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 1e-4,
+        "lora_rank": 8,
+        "with_audio": false,
+        "quantization": null,
+        "validation_interval": null,
+        "checkpoint_interval": null
+      },
+      "timeout": 300000
+    }
+  ],
+  "config": {
+    "gpuTypeId": "NVIDIA GeForce RTX 4090",
+    "gpuCount": 1,
+    "env": [
+      {
+        "key": "TOKENIZERS_PARALLELISM",
+        "value": "true"
+      },
+      {
+        "key": "PYTORCH_CUDA_ALLOC_CONF",
+        "value": "expandable_segments:True"
+      }
+    ],
+    "allowedCudaVersions": [
+      "12.7",
+      "12.6",
+      "12.5",
+      "12.4",
+      "12.3",
+      "12.2",
+      "12.1",
+      "12.0"
+    ]
+  }
+}

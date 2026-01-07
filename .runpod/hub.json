@@ -1,0 +1,189 @@
+{
+  "title": "LTX-2 LoRA Training",
+  "description": "Serverless LTX-2 video generation model LoRA training with int8 quantization support. Train custom video generation models with audio support via API.",
+  "type": "serverless",
+  "category": "video",
+  "iconUrl": "https://raw.githubusercontent.com/aliabougazia/ltx-2/main/.runpod/icon.png",
+  "config": {
+    "runsOn": "GPU",
+    "containerDiskInGb": 20,
+    "presets": [
+      {
+        "name": "Quick Training (1000 steps)",
+        "defaults": {
+          "TRAINING_STEPS": "1000",
+          "BATCH_SIZE": "1",
+          "GRADIENT_ACCUMULATION": "4",
+          "LEARNING_RATE": "0.0001",
+          "LORA_RANK": "32",
+          "WITH_AUDIO": "true",
+          "QUANTIZATION": "int8-quanto"
+        }
+      },
+      {
+        "name": "Full Training (3000 steps)",
+        "defaults": {
+          "TRAINING_STEPS": "3000",
+          "BATCH_SIZE": "1",
+          "GRADIENT_ACCUMULATION": "4",
+          "LEARNING_RATE": "0.0001",
+          "LORA_RANK": "32",
+          "WITH_AUDIO": "true",
+          "QUANTIZATION": "int8-quanto"
+        }
+      },
+      {
+        "name": "High Quality (5000 steps, rank 64)",
+        "defaults": {
+          "TRAINING_STEPS": "5000",
+          "BATCH_SIZE": "1",
+          "GRADIENT_ACCUMULATION": "4",
+          "LEARNING_RATE": "0.0001",
+          "LORA_RANK": "64",
+          "WITH_AUDIO": "true",
+          "QUANTIZATION": "int8-quanto"
+        }
+      },
+      {
+        "name": "Video Only (No Audio)",
+        "defaults": {
+          "TRAINING_STEPS": "3000",
+          "BATCH_SIZE": "1",
+          "GRADIENT_ACCUMULATION": "4",
+          "LEARNING_RATE": "0.0001",
+          "LORA_RANK": "32",
+          "WITH_AUDIO": "false",
+          "QUANTIZATION": "int8-quanto"
+        }
+      }
+    ],
+    "env": [
+      {
+        "key": "MODEL_PATH",
+        "input": {
+          "name": "Model Path",
+          "type": "string",
+          "description": "Path to LTX-2 model checkpoint (.safetensors)",
+          "default": "/workspace/checkpoints/ltx-2-19b-dev.safetensors"
+        }
+      },
+      {
+        "key": "TEXT_ENCODER_PATH",
+        "input": {
+          "name": "Text Encoder Path",
+          "type": "string",
+          "description": "Path to Gemma text encoder directory",
+          "default": "/workspace/checkpoints/gemma-3-12b-it-qat-q4_0-unquantized"
+        }
+      },
+      {
+        "key": "DATA_PATH",
+        "input": {
+          "name": "Dataset Path",
+          "type": "string",
+          "description": "Path to preprocessed training data",
+          "default": "/workspace/datasets/.precomputed/"
+        }
+      },
+      {
+        "key": "TRAINING_STEPS",
+        "input": {
+          "name": "Training Steps",
+          "type": "number",
+          "description": "Number of training steps",
+          "default": 3000
+        }
+      },
+      {
+        "key": "LORA_RANK",
+        "input": {
+          "name": "LoRA Rank",
+          "type": "number",
+          "description": "LoRA rank (higher = more parameters, typically 16-64)",
+          "default": 32
+        }
+      },
+      {
+        "key": "LEARNING_RATE",
+        "input": {
+          "name": "Learning Rate",
+          "type": "string",
+          "description": "Learning rate for training",
+          "default": "0.0001"
+        }
+      },
+      {
+        "key": "BATCH_SIZE",
+        "input": {
+          "name": "Batch Size",
+          "type": "number",
+          "description": "Batch size per GPU (typically 1 for LTX-2)",
+          "default": 1
+        }
+      },
+      {
+        "key": "GRADIENT_ACCUMULATION",
+        "input": {
+          "name": "Gradient Accumulation Steps",
+          "type": "number",
+          "description": "Number of gradient accumulation steps",
+          "default": 4
+        }
+      },
+      {
+        "key": "WITH_AUDIO",
+        "input": {
+          "name": "Train with Audio",
+          "type": "boolean",
+          "description": "Enable audio-video joint training",
+          "default": true
+        }
+      },
+      {
+        "key": "QUANTIZATION",
+        "input": {
+          "name": "Quantization",
+          "type": "string",
+          "description": "Quantization method (int8-quanto or null for no quantization)",
+          "default": "int8-quanto"
+        }
+      },
+      {
+        "key": "OUTPUT_DIR",
+        "input": {
+          "name": "Output Directory",
+          "type": "string",
+          "description": "Directory for saving checkpoints and outputs",
+          "default": "outputs/lora-training"
+        }
+      },
+      {
+        "key": "CHECKPOINT_INTERVAL",
+        "input": {
+          "name": "Checkpoint Interval",
+          "type": "number",
+          "description": "Steps between checkpoint saves",
+          "default": 250
+        }
+      },
+      {
+        "key": "WANDB_API_KEY",
+        "input": {
+          "name": "Weights & Biases API Key",
+          "type": "string",
+          "description": "Optional: W&B API key for experiment tracking",
+          "default": ""
+        }
+      },
+      {
+        "key": "HF_TOKEN",
+        "input": {
+          "name": "Hugging Face Token",
+          "type": "string",
+          "description": "Optional: HF token for pushing models to Hub",
+          "default": ""
+        }
+      }
+    ]
+  }
+}
