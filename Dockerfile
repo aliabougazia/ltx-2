@@ -45,6 +45,9 @@ WORKDIR /workspace/ltx-2
 # Install Python dependencies using uv
 RUN uv sync
 
+# Install runpod for serverless support
+RUN /workspace/ltx-2/.venv/bin/pip install runpod requests
+
 # Create directories for checkpoints and datasets
 RUN mkdir -p /workspace/checkpoints /workspace/datasets
 
