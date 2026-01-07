@@ -44,6 +44,8 @@ def quantize_model(
             "rope",
             "*norm*",
             "proj_out",
+            "patchify_proj",  # Critical for LoRA compatibility
+            "audio_patchify_proj",  # Critical for LoRA compatibility
         ]
     }
     if quantize_activations:

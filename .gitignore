@@ -39,3 +39,8 @@ tmp
 *.png
 *.wav
 *.webp
+
+# Exclude training outputs and datasets
+packages/ltx-trainer/output/
+packages/ltx-trainer/outputs/
+packages/ltx-trainer/datasets/
