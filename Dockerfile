@@ -33,12 +33,13 @@ RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1 &
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.cargo/bin:${PATH}"
 
-# Clone the repository
-ARG GITHUB_TOKEN
-RUN if [ -z "$GITHUB_TOKEN" ]; then \
-        echo "Error: GITHUB_TOKEN build arg is required for private repo" && exit 1; \
-    fi && \
-    git clone https://${GITHUB_TOKEN}@github.com/aliabougazia/ltx-2.git /workspace/ltx-2
+# Clone the repository (works with public repos, for private repos use GITHUB_TOKEN build arg)
+ARG GITHUB_TOKEN=""
+RUN if [ -n "$GITHUB_TOKEN" ]; then \
+        git clone https://${GITHUB_TOKEN}@github.com/aliabougazia/ltx-2.git /workspace/ltx-2; \
+    else \
+        git clone https://github.com/aliabougazia/ltx-2.git /workspace/ltx-2; \
+    fi
 
 WORKDIR /workspace/ltx-2
 
