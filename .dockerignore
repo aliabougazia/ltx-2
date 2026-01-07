@@ -1,0 +1,42 @@
+# Exclude large files and outputs from Docker build context
+__pycache__/
+*.py[oc]
+*.egg-info
+.venv
+.python-version
+build/
+dist/
+
+# Exclude training data and outputs
+packages/ltx-trainer/checkpoints/
+packages/ltx-trainer/datasets/
+packages/ltx-trainer/output/
+packages/ltx-trainer/outputs/
+
+# Exclude model files
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+*.gguf
+
+# Exclude media files
+*.gif
+*.heic
+*.heif
+*.jpg
+*.jpeg
+*.m4a
+*.mov
+*.mp4
+*.png
+*.wav
+*.webp
+
+# Exclude IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+.git/
+tmp/
+.wandb/
